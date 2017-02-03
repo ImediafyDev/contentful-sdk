@@ -60,13 +60,15 @@ class ManagementClient extends ClientBase {
      * @param array $headers
      * @return Psr\Http\Message\ResponseInterface|mixed|null
      */
-    function put($resource, $payload = array(), $headers = array())
+    function put($resource, $payload = array(), $headers = array(), $content_type, $entry_version)
     {
         $result = $this->client->put($this->build_url($resource), [
             'headers' => array_merge([
                 'Content-Type' => $this->getContentType(),
                 'Authorization' => $this->getBearer(),
                 'Content-Length' => (!count($payload)) ? 0 : strlen(json_encode($payload)),
+                'X-Contentful-Content-Type' => $content_type,
+                'X-Contentful-Version' => $entry_version
             ], $headers),
             'body' => json_encode($payload)
         ]);
